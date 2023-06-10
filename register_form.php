@@ -1,14 +1,10 @@
 <?php
 
 @include 'config.php';
-@include 'util.php';
+include 'util.php';
 
 if (isset($_POST['submit'])) {
-    $conn = mysqli_connect($host, $dbid, $dbpass, $dbname);
-
-    if (!$conn) {
-        die('Could not connect: ' . mysqli_connect_error());
-    }
+    $conn = dbconnect($host, $dbid, $dbpass, $dbname);
 
     $id = mysqli_real_escape_string($conn, $_POST['id']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -17,7 +13,7 @@ if (isset($_POST['submit'])) {
     $cpass = md5($_POST['cpassword']);
     $user_type = $_POST['user_type'];
 
-    $select = "SELECT * FROM user_form WHERE email = '$email'";
+    $select = "SELECT * FROM user_form WHERE email = '$email' && password = '$pass'";
 
     $result = mysqli_query($conn, $select);
 
