@@ -1,36 +1,41 @@
 <?php
 
 @include 'config.php';
+@include 'util.php';
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
+    $conn = mysqli_connect($host, $dbid, $dbpass, $dbname);
 
-   $name = mysqli_real_escape_string($conn, $_POST['name']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $pass = md5($_POST['password']);
-   $cpass = md5($_POST['cpassword']);
-   $user_type = $_POST['user_type'];
+    if (!$conn) {
+        die('Could not connect: ' . mysqli_connect_error());
+    }
 
-   $select = " SELECT * FROM user_form WHERE email = '$email' && password = '$pass' ";
+    $id = mysqli_real_escape_string($conn, $_POST['id']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pass = md5($_POST['password']);
+    $cpass = md5($_POST['cpassword']);
+    $user_type = $_POST['user_type'];
 
-   $result = mysqli_query($conn, $select);
+    $select = "SELECT * FROM user_form WHERE email = '$email'";
 
-   if(mysqli_num_rows($result) > 0){
+    $result = mysqli_query($conn, $select);
 
-      $error[] = 'user already exist!';
+    if (mysqli_num_rows($result) > 0) {
+        $error[] = 'User already exists!';
+    } else {
+        if ($pass != $cpass) {
+            $error[] = 'Passwords do not match!';
+        } else {
+            $insert = "INSERT INTO user_form (id, name, email, password, user_type) VALUES ('$id', '$name','$email','$pass','$user_type')";
+            mysqli_query($conn, $insert);
+            header('location: login_form.php');
+            exit;
+        }
+    }
 
-   }else{
-
-      if($pass != $cpass){
-         $error[] = 'password not matched!';
-      }else{
-         $insert = "INSERT INTO user_form(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
-         mysqli_query($conn, $insert);
-         header('location:login_form.php');
-      }
-   }
-
-};
-
+    mysqli_close($conn);
+}
 
 ?>
 
@@ -59,6 +64,7 @@ if(isset($_POST['submit'])){
          };
       };
       ?>
+      <input type="id" name="id" required placeholder="Type your student Id">
       <input type="text" name="name" required placeholder="enter your name">
       <input type="email" name="email" required placeholder="enter your email">
       <input type="password" name="password" required placeholder="enter your password">
