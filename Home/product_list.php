@@ -24,7 +24,7 @@ include "util.php";
             <th>Name</th>
             <th>Price</th>
             <th>Image</th>
-            <th>Uploaded Date</th>
+            <th>Event Date</th>
             <th>Functionality</th>
         </tr>
         <?
@@ -36,7 +36,7 @@ include "util.php";
             echo "<td><a href='product_view.php?product_id={$row['product_id']}'>{$row['product_name']}</a></td>";
             echo "<td>{$row['price']}</td>";
             echo "<td><img src='{$row['image_path']}' alt='Product Image' style='width: 100px;'></td>"; // Display the image
-            echo "<td>{$row['added_datetime']}</td>";
+            echo "<td>{$row['date']}</td>";
             echo "<td width='17%'>
                 <a href='product_form.php?product_id={$row['product_id']}'><button class='button primary small'>Edit</button></a>
                  <button onclick='javascript:deleteConfirm({$row['product_id']})' class='button danger small'>Delete</button>

@@ -28,7 +28,7 @@ while ($row = mysqli_fetch_array($result)) {
 }
 
 // Error variables
-$manufacturerError = $productNameError = $productDescError = $priceError = $imageError = "";
+$manufacturerError = $productNameError = $productDescError = $priceError = $imageError = $dateError = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $manufacturer_id = $_POST["manufacturer_id"];
@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $product_desc = $_POST["product_desc"];
     $price = $_POST["price"];
     $image = $_FILES["image"]["name"];
+    $date = $_POST["date"];
     
     // Validation
     $isValid = true;
@@ -57,6 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (empty($price)) {
         $priceError = "Please enter the price.";
+        $isValid = false;
+    }
+    
+    if (empty($date)) {
+        $dateError = "Please enter the date.";
         $isValid = false;
     }
     
@@ -116,6 +122,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <span class="error"><?=$priceError?></span>
         </p>
         <p>
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" value="<?=$product['date']?>" />
+            <span class="error"><?=$dateError?></span>
+        </p>
+        <p>
             <label for="image">Upload Image</label>
             <input type="file" id="image" name="image" accept="image/*">
             <span class="error"><?=$imageError?></span>
@@ -131,6 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 var productName = document.getElementById("product_name").value;
                 var productDesc = document.getElementById("product_desc").value;
                 var price = document.getElementById("price").value;
+                var date = document.getElementById("date").value;
                 var image = document.getElementById("image").value;
 
                 if (manufacturerId == "-1") {
@@ -149,6 +161,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     alert("Please enter the price.");
                     return false;
                 }
+                else if (date.trim() == "") {
+                    alert("Please enter the date.");
+                    return false;
+                }
                 else if (image.trim() == "" || document.getElementById("image").files.length === 0) {
                     alert("Please choose an image file.");
                     return false;
@@ -160,5 +176,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <?php include("footer.php"); ?>
+
 
 
