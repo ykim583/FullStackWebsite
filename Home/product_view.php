@@ -7,7 +7,7 @@ $conn = dbconnect($host, $dbid, $dbpass, $dbname);
 
 if (array_key_exists("product_id", $_GET)) {
     $product_id = $_GET["product_id"];
-    $query = "select * from product natural join manufacturer where product_id = $product_id";
+    $query = "SELECT * FROM product NATURAL JOIN manufacturer WHERE product_id = $product_id";
     $result = mysqli_query($conn, $query);
     $product = mysqli_fetch_assoc($result);
     if (!$product) {
@@ -48,5 +48,11 @@ if (array_key_exists("product_id", $_GET)) {
             <label for="price">Price</label>
             <input readonly type="number" id="price" name="price" value="<?= $product['price'] ?>"/>
         </p>
+
+        <p>
+            <label for="event_date">Event Date</label>
+            <input readonly type="text" id="event_date" name="event_date" value="<?= $product['date'] ?>"/>
+        </p>
+
     </div>
 <? include "footer.php" ?>
