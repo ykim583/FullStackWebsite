@@ -41,4 +41,33 @@ function check_id($conn, $id)
 		return false;
 	}
 }
-?>
+
+function handleImageUpload($file)
+{
+    $imageFileType = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+  
+    // Check if the file is a valid image
+    $validExtensions = array("jpg", "jpeg", "png", "gif");
+    if (!in_array($imageFileType, $validExtensions)) {
+        die("Error: Only JPG, JPEG, PNG, and GIF files are allowed.");
+    }
+  
+    // Generate a unique filename for the uploaded image
+    $targetFile = uniqid() . '.' . $imageFileType;
+	
+    // Move the uploaded file to the current directory
+    if (!move_uploaded_file($file["tmp_name"], $targetFile)) {
+        die("Error uploading the image.");
+    }
+  
+    return $targetFile;
+}
+
+function deleteImage($image_path) {
+    // Implement the logic to delete the image file
+    if (file_exists($image_path)) {
+        unlink($image_path);
+    }
+}
+
+?>  
