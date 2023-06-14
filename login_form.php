@@ -25,23 +25,19 @@ if (isset($_POST['submit'])) {
         $minNoRow = mysqli_fetch_array($minNoResult);
         $minNo = $minNoRow[0];
 
-        // Set the logged-in user's 'no' value to be -1 the minimum 'no' value
+        // Set the logged-in user's 'no' value to be the minimum 'no' value minus 1
         $user_no = $row['no'];
         $newUserNo = $minNo - 1;
-        $decrementUserNo = "UPDATE user_form SET no = '$newUserNo' WHERE no = '$user_no'";
-        mysqli_query($conn, $decrementUserNo);
+        $updateUserNo = "UPDATE user_form SET no = '$newUserNo' WHERE email = '$email'";
+        mysqli_query($conn, $updateUserNo);
 
-        // Increment 'no' values for other users (excluding the logged-in user) by 1
-        $incrementNos = "UPDATE user_form SET no = no + 1 WHERE no < '$user_no'";
+        // Increment 'no' values for all other users by 1
+        $incrementNos = "UPDATE user_form SET no = no + 1 WHERE email != '$email'";
         mysqli_query($conn, $incrementNos);
 
-        // Increment 'no' values for all users by 1
-        $incrementAllNos = "UPDATE user_form SET no = no + 1";
-        mysqli_query($conn, $incrementAllNos);
-
-        // Set the logged-in user's 'no' value to 1
-        $updateUserNo = "UPDATE user_form SET no = 1 WHERE email = '$email'";
-        mysqli_query($conn, $updateUserNo);
+        // Increment the current user's 'no' value by 1
+        $incrementCurrentUser = "UPDATE user_form SET no = no + 1 WHERE email = '$email'";
+        mysqli_query($conn, $incrementCurrentUser);
 
         if ($row['user_type'] == 'admin') {
             $_SESSION['admin_name'] = $row['name'];
