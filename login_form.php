@@ -19,6 +19,30 @@ if (isset($_POST['submit'])) {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_array($result);
 
+        // Get the minimum 'no' value from the user_form table
+        $minNoQuery = "SELECT MIN(no) FROM user_form";
+        $minNoResult = mysqli_query($conn, $minNoQuery);
+        $minNoRow = mysqli_fetch_array($minNoResult);
+        $minNo = $minNoRow[0];
+
+        // Set the logged-in user's 'no' value to be -1 the minimum 'no' value
+        $user_no = $row['no'];
+        $newUserNo = $minNo - 1;
+        $decrementUserNo = "UPDATE user_form SET no = '$newUserNo' WHERE no = '$user_no'";
+        mysqli_query($conn, $decrementUserNo);
+
+        // Increment 'no' values for other users (excluding the logged-in user) by 1
+        $incrementNos = "UPDATE user_form SET no = no + 1 WHERE no < '$user_no'";
+        mysqli_query($conn, $incrementNos);
+
+        // Increment 'no' values for all users by 1
+        $incrementAllNos = "UPDATE user_form SET no = no + 1";
+        mysqli_query($conn, $incrementAllNos);
+
+        // Set the logged-in user's 'no' value to 1
+        $updateUserNo = "UPDATE user_form SET no = 1 WHERE email = '$email'";
+        mysqli_query($conn, $updateUserNo);
+
         if ($row['user_type'] == 'admin') {
             $_SESSION['admin_name'] = $row['name'];
             header('Location: admin_page.php');
