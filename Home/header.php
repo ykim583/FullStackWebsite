@@ -17,8 +17,8 @@
                 </li>
                 <li><a href='product_list.php'>Event List</a></li>
                 <li><a href='product_form.php'>Event Registration</a></li>
-                <li><a href='buy_form.php'>Ticket Purchase</a></li>
-                <li><a href='buy_list.php'>Purchase List</a></li>
+                <li><a href='purchase_form.php'>Ticket Purchase</a></li>
+                <li><a href='purchase_list.php'>Purchase List</a></li>
                 <li><a href="../login_form.php">Logout</a></li>
             </ul>
         </div>
