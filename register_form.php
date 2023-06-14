@@ -1,5 +1,4 @@
 <?php
-
 @include 'config.php';
 include 'util.php';
 
@@ -23,7 +22,16 @@ if (isset($_POST['submit'])) {
         if ($pass != $cpass) {
             $error[] = 'Passwords do not match!';
         } else {
-            $insert = "INSERT INTO user_form (id, name, email, password, user_type) VALUES ('$id', '$name','$email','$pass','$user_type')";
+            // Get the current maximum value of the 'no' column
+            $query = "SELECT MAX(no) AS max_no FROM user_form";
+            $result = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($result);
+            $max_no = $row['max_no'];
+
+            // Increment the maximum 'no' value by 1 to assign to the new user
+            $user_no = $max_no + 1;
+
+            $insert = "INSERT INTO user_form (id, name, email, password, user_type, no) VALUES ('$id', '$name', '$email', '$pass', '$user_type', '$user_no')";
             mysqli_query($conn, $insert);
             header('location: login_form.php');
             exit;
@@ -32,8 +40,8 @@ if (isset($_POST['submit'])) {
 
     mysqli_close($conn);
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
