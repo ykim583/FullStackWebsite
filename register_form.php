@@ -13,7 +13,6 @@ if (isset($_POST['submit'])) {
     $user_type = $_POST['user_type'];
 
     $select = "SELECT * FROM user_form WHERE email = '$email' && password = '$pass'";
-
     $result = mysqli_query($conn, $select);
 
     if (mysqli_num_rows($result) > 0) {
@@ -68,7 +67,7 @@ if (isset($_POST['submit'])) {
          };
       };
       ?>
-      <input type="id" name="id" required placeholder="Type your student Id">
+      <input type="text" name="id" required placeholder="Type your student Id" pattern="[0-9]+" title="Please enter only numeric values">
       <input type="text" name="name" required placeholder="enter your name">
       <input type="email" name="email" required placeholder="enter your email">
       <input type="password" name="password" required placeholder="enter your password">
